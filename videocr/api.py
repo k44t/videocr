@@ -17,6 +17,9 @@ def save_subtitles_to_file(
         time_start='0:00', time_end='', conf_threshold=65, sim_threshold=90,
         box=2, frame_skip=0, brightness_threshold=None, verbose=False) -> None:
     with open(file_path, 'w+', encoding='utf-8') as f:
-        f.write(get_subtitles(
+        subs = get_subtitles(
             video_path, lang, time_start, time_end, conf_threshold,
-            sim_threshold, box, frame_skip, brightness_threshold, verbose))
+            sim_threshold, box, frame_skip, brightness_threshold, verbose)
+        if verbose:
+            print(f"writing subtitles: {file_path}")
+        f.write(subs)

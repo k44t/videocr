@@ -128,6 +128,9 @@ class Video:
             raise AttributeError(
                 'Please call self.run_ocr() first to perform ocr on frames')
 
+        if self.verbose:
+            print("processing OCR data and generating subtitles...")
+
         # divide ocr of frames into subtitle paragraphs using sliding window
         WIN_BOUND = int(self.fps // 2)  # 1/2 sec sliding window boundary
         bound = WIN_BOUND
@@ -159,8 +162,6 @@ class Video:
     def _append_sub(self, sub: PredictedSubtitle) -> None:
         if len(sub.text) == 0:
             return
-        if self.verbose:
-            print(f"predicted subtitle: {sub.text}")
 
         # merge new sub to the last subs if they are similar
         while self.pred_subs and sub.is_similar_to(self.pred_subs[-1]):
