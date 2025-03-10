@@ -6,12 +6,14 @@ from . import constants
 
 
 # download language data files to ~/tessdata if necessary
-def download_lang_data(lang: str):
+def download_lang_data(lang: str, verbose=False):
     constants.TESSDATA_DIR.mkdir(parents=True, exist_ok=True)
 
     for lang_name in lang.split('+'):
         filepath = constants.TESSDATA_DIR / '{}.traineddata'.format(lang_name)
         if not filepath.is_file():
+            if verbose:
+                print(f"downloading language data for: {lang_name}")
             # download needed file
             if lang_name[0].isupper():
                 url = constants.TESSDATA_SCRIPT_URL.format(lang_name)
@@ -20,6 +22,7 @@ def download_lang_data(lang: str):
 
             with urlopen(url) as res, open(filepath, 'w+b') as f:
                 shutil.copyfileobj(res, f)
+            print("done.")
 
 
 # convert time string to frame index

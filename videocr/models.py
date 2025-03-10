@@ -7,7 +7,7 @@ from fuzzywuzzy import fuzz
 @dataclass
 class PredictedWord:
     __slots__ = 'confidence', 'text'
-    confidence: int
+    confidence: float
     text: str
 
 
@@ -29,7 +29,7 @@ class PredictedFrame:
                 # no word is predicted
                 continue
             _, _, block_num, *_, conf, text = word_data
-            block_num, conf = int(block_num), int(conf)
+            block_num, conf = int(block_num), float(conf)
 
             # handle line breaks
             if block < block_num:
