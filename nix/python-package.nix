@@ -20,7 +20,7 @@ deps = [
   ];
 in buildPythonPackage rec {
   pname = "videocr";
-  version = "master";
+  version = "2.0";
   pyproject = true;
 
   src = ./..;
@@ -33,25 +33,6 @@ in buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = deps;
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "python-Levenshtein" "Levenshtein"
-    substituteInPlace videocr/constants.py \
-      --replace-fail "master" "main"
-
-  '';
-
-  postInstall = ''
-    rm $out/bin/videocr.sh || true
-
-    mkdir -p $out/bin
-    cp ${writeShellScript "videocr" ''
-      #!${bash}/bin/bash
-      PATH=$out/bin:${lib.makeBinPath deps}:${python}/bin python3 -m videocr.main
-    ''} $out/bin/videocr
-
-  '';
 
   # Project has no tests
   doCheck = false;

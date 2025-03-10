@@ -49,7 +49,11 @@ Laughs Thanks.
 
 ## Performance
 
-The OCR process is CPU intensive. More CPU cores will make it faster. using `--skip-frames` will also make it faster. Using `--brightness-threshold` will make it faster and more accurate especially if subtitles are white.
+The OCR process is CPU intensive. More CPU cores will make it faster. 
+
+`--skip-frames` will also make it faster. 
+`--brightness-threshold` will make it faster and more accurate especially if subtitles are white.
+`--box` allows you to reduce the area of the each frame image that needs to be processed (and thus make it faster)
 
 ## Installation
 

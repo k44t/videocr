@@ -1,3 +1,3 @@
 { pkgs ? import <nixpkgs> {} , ... }:
 
-(pkgs.python312Packages.callPackage ./python-package.nix {}) 
+(pkgs.callPackage ./package.nix {}) 
