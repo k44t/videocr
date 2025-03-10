@@ -203,7 +203,7 @@ def parse_frame(s):
 parser = argparse.ArgumentParser(description="OCR subtitle extractor (based on Tesseract)", formatter_class=CustomHelpFormatter)
 parser.add_argument("video", type=str, help="the video file to extract subtitles from")
 parser.add_argument("output", type=str, help="the path to the SRT file in which the subtitles will be written")
-parser.add_argument("--lang", choices=langs.keys(), default="eng", help="the language and/or script of the subtitiles")
+parser.add_argument("--lang", type=str, default="eng", help="the language and/or script of the subtitiles")
 parser.add_argument("--start-time", default="0:00", type=str, help="timestamp of the format H:MM[:SS[.SSS]]")
 parser.add_argument("--end-time", default="", type=str, help="timestamp of the format H:MM[:SS[.SSS]]")
 parser.add_argument("--brightness-threshold", default=None, type=int, help='''If set, pixels whose brightness are less than the threshold will be blackened out. Valid brightness values range from 0 (black) to 255 (white). This can help improve accuracy when performing OCR on videos with white subtitles.''')

@@ -1,6 +1,6 @@
 # videocr
 
-Extract hardcoded (burned-in) subtitles from videos using the [Tesseract](https://github.com/tesseract-ocr/tesseract) OCR engine with Python.
+Extract hardcoded (burned-in) subtitles from videos using the [Tesseract](https://github.com/tesseract-ocr/tesseract) OCR engine (Python API included).
 
 Input a video with hardcoded subtitles:
 
@@ -9,16 +9,9 @@ Input a video with hardcoded subtitles:
   <img width="430" alt="screenshot" src="https://user-images.githubusercontent.com/10210967/56873659-3b76dd00-6a34-11e9-97aa-2c3e96fe3a97.png">
 </p>
 
-```python
-# example.py
-
-from videocr import get_subtitles
-
-if __name__ == '__main__':  # This check is mandatory for Windows.
-    print(get_subtitles('video.mp4', lang='chi_sim+eng', sim_threshold=70, conf_threshold=65))
+```bash
+videocr input.mkv output.srt --lang "chi_sim+eng" --similarity-threshold 70 --confidence-threshold 65 --brightness-threshold 150
 ```
-
-`$ python3 example.py`
 
 Output:
 
@@ -56,56 +49,32 @@ Laughs Thanks.
 
 ## Performance
 
-The OCR process is CPU intensive. It takes 3 minutes on my dual-core laptop to extract a 20 seconds video. More CPU cores will make it faster.
+The OCR process is CPU intensive. More CPU cores will make it faster. using `a--skip-frames` will also make it faster. Using `--brightness-threshold` will make it faster especially if subtitles are white.
 
 ## Installation
 
-1. Install [Tesseract](https://github.com/tesseract-ocr/tesseract/wiki) and make sure it is in your `$PATH`
+1. clone this repo
 
-2. `$ pip install videocr`
+2. add the package to your nixOS configuration 
 
-## API
+  ```nix
 
-1. Return subtitle string in SRT format
-    ```python
-    get_subtitles(
-        video_path: str, lang='eng', time_start='0:00', time_end='',
-        conf_threshold=65, sim_threshold=90, use_fullframe=False)
-    ```
+    environment.systemPackages = [
+      (pkgs.callPackage <path-to-videocr-repo/nix> {})
+    ];
 
-2. Write subtitles to `file_path`
-    ```python
-    save_subtitles_to_file(
-        video_path: str, file_path='subtitle.srt', lang='eng', time_start='0:00', time_end='',
-        conf_threshold=65, sim_threshold=90, use_fullframe=False)
-    ```
+  ```
+3. or to your home-manager configuration
+  ```
+    home.packages = [
+      (pkgs.callPackage <path-to-videocr-repo/nix> {})
+    ];
+  ```
+4. or install this python project in some classical python-ish way.
 
-### Parameters
 
-- `lang`
+### Usage
 
-  The language of the subtitles. You can extract subtitles in almost any language. All language codes on [this page](https://github.com/tesseract-ocr/tesseract/wiki/Data-Files#data-files-for-version-400-november-29-2016) (e.g. `'eng'` for English) and all script names in [this repository](https://github.com/tesseract-ocr/tessdata_fast/tree/master/script) (e.g. `'HanS'` for simplified Chinese) are supported.
-  
-  Note that you can use more than one language, e.g. `lang='hin+eng'` for Hindi and English together. 
-  
-  Language files will be automatically downloaded to your `~/tessdata`. You can read more about Tesseract language data files on their [wiki page](https://github.com/tesseract-ocr/tesseract/wiki/Data-Files).
+Run `videocr --help` (or `videocr.sh --help` or `python -m videocr.main --help`) for usage information.
 
-- `conf_threshold`
-
-  Confidence threshold for word predictions. Words with lower confidence than this value will be discarded. The default value `65` is fine for most cases. 
-
-  Make it closer to 0 if you get too few words in each line, or make it closer to 100 if there are too many excess words in each line.
-
-- `sim_threshold`
-
-  Similarity threshold for subtitle lines. Subtitle lines with larger [Levenshtein](https://en.wikipedia.org/wiki/Levenshtein_distance) ratios than this threshold will be merged together. The default value `90` is fine for most cases.
-
-  Make it closer to 0 if you get too many duplicated subtitle lines, or make it closer to 100 if you get too few subtitle lines.
-
-- `time_start` and `time_end`
-
-  Extract subtitles from only a clip of the video. The subtitle timestamps are still calculated according to the full video length.
-
-- `use_fullframe`
-
-  By default, only the bottom half of each frame is used for OCR. You can explicitly use the full frame if your subtitles are not within the bottom half of each frame.
+You can also do `from videocr import *` from a python script to use the API. No promises that it won't change in the future though.

@@ -40,11 +40,17 @@ in buildPythonPackage rec {
     substituteInPlace videocr/constants.py \
       --replace-fail "master" "main"
 
+  '';
+
+  postInstall = ''
+    rm $out/bin/videocr.sh || true
+
     mkdir -p $out/bin
     cp ${writeShellScript "videocr" ''
       #!${bash}/bin/bash
       PATH=$out/bin:${lib.makeBinPath deps}:${python}/bin python3 -m videocr.main
     ''} $out/bin/videocr
+
   '';
 
   # Project has no tests
