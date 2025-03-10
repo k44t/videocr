@@ -60,8 +60,8 @@ in buildPythonPackage rec {
 
   meta = with lib; {
     description = "Extract hardcoded subtitles from videos using machine learning";
-    homepage = "https://github.com/apm1467/videocr";
+    homepage = "https://github.com/k44t/videocr";
     license = licenses.mit;
-    maintainers = with maintainers; [ ozkutuk ];
+    maintainers = with maintainers; [ ];
   };
 }
