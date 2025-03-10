@@ -78,3 +78,8 @@ The OCR process is CPU intensive. More CPU cores will make it faster. using `--s
 Run `videocr --help` (or `videocr.sh --help` or `python -m videocr.main --help`) for usage information.
 
 You can also do `from videocr import *` from a python script to use the API. No promises that it won't change in the future though.
+
+
+### Credits
+
+for most of the code to @apm1467 and for the brightness threshold to @devmaxxing
