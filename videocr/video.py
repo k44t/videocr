@@ -41,11 +41,14 @@ class Video:
             self.width = int(v.get(cv2.CAP_PROP_FRAME_WIDTH))
 
     def run_ocr(self, lang: str, time_start: str, time_end: str,
-                conf_threshold: int, box = 2, frame_skip: int = 0, verbose: bool = False) -> None:
+                conf_threshold: int, box = 2, frame_skip: int = 0, 
+                brightness_threshold = None,
+                verbose: bool = False) -> None:
         self.lang = lang
         self.box = box
         self.verbose = verbose
         self.frame_skip = frame_skip
+        self.brightness_threshold = brightness_threshold
         if verbose:
             print("starting OCR")
 
@@ -94,6 +97,10 @@ class Video:
             img = img[self.box.top_y:self.box.bottom_y, self.box.left_x:self.box.right_x]
         else:
             img = img[self.height // self.box:, :]
+
+        if self.brightness_threshold:
+            img = cv2.bitwise_and(img, img, mask=cv2.inRange(img, (self.brightness_threshold, self.brightness_threshold, self.brightness_threshold), (255, 255, 255)))
+
         config = '--tessdata-dir "{}"'.format(constants.TESSDATA_DIR)
         r = None
         try:
@@ -127,7 +134,6 @@ class Video:
         i = 0
         j = 1
         while j < len(self.pred_frames):
-
             fi, fj = self.pred_frames[i], self.pred_frames[j]
 
             if fi.is_similar_to(fj):

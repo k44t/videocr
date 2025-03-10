@@ -206,6 +206,7 @@ parser.add_argument("output", type=str, help="the path to the SRT file in which 
 parser.add_argument("--lang", choices=langs.keys(), default="eng", help="the language and/or script of the subtitiles")
 parser.add_argument("--start-time", default="0:00", type=str, help="timestamp of the format H:MM[:SS[.SSS]]")
 parser.add_argument("--end-time", default="", type=str, help="timestamp of the format H:MM[:SS[.SSS]]")
+parser.add_argument("--brightness-threshold", default=None, type=int, help='''If set, pixels whose brightness are less than the threshold will be blackened out. Valid brightness values range from 0 (black) to 255 (white). This can help improve accuracy when performing OCR on videos with white subtitles.''')
 parser.add_argument("--confidence-threshold", default=65, type=int, help='''Confidence threshold for word predictions. Words with lower confidence than this value will be discarded. The default value 65 is fine for most cases.
 Make it closer to 0 if you get too few words in each line, or make it closer to 100 if there are too many excess words in each line.''')
 parser.add_argument("--similarity-threshold", default=90, type=int, help='''Similarity threshold for subtitle lines. Subtitle lines with larger Levenshtein ratios than this threshold will be merged together. The default value 90 is fine for most cases.
@@ -230,6 +231,7 @@ def run(args):
         sim_threshold=args.similarity_threshold,
         box=args.box,
         frame_skip=args.frame_skip,
+        brightness_threshold=args.brightness_threshold,
         verbose=True
     )
 
