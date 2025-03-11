@@ -1,6 +1,8 @@
 # videocr
 
-Extract hardcoded (burned-in) subtitles from videos using the [Tesseract](https://github.com/tesseract-ocr/tesseract) OCR engine (Python API included).
+Extract hardcoded (burned-in) subtitles from videos using the [Tesseract](https://github.com/tesseract-ocr/tesseract) OCR engine.
+
+This is an enhanced fork of [apm1467/videocr](https://github.com/apm1467/videocr).
 
 Input a video with hardcoded subtitles:
 
@@ -12,6 +14,8 @@ Input a video with hardcoded subtitles:
 ```bash
 videocr input.mkv output.srt --lang "chi_sim+eng" --similarity-threshold 70 --confidence-threshold 65 --brightness-threshold 150
 ```
+
+
 
 Output:
 
@@ -51,9 +55,24 @@ Laughs Thanks.
 
 The OCR process is CPU intensive. More CPU cores will make it faster. 
 
-`--skip-frames` will also make it faster. 
-`--brightness-threshold` will make it faster and more accurate especially if subtitles are white.
+`--brightness-threshold` will make it much faster and more accurate especially if subtitles are white.
+
 `--box` allows you to reduce the area of the each frame image that needs to be processed (and thus make it faster)
+
+`--skip-frames` will also make it a real lot faster. 
+
+- `--skip-frames` should not be higher than the duration of the shortest subtitle displayed in the video, or you might be unlucky and all the frames in which some of the subtitles appear will be skipped. You could of course also correct the few instances of this manually.
+- Skipping frames will make timestamps less accurate. This might not trouble you much if you skip every 10 frames in a 30fps video, because accuracy will still be 1/3rd of a second.
+- Some videos have long subtitles (containing much text) that consequently are displayed for a long duration. You can then use a very high number for `--skip-frames` 
+
+You can realign inaccurately synced subtitles with the audio by using one of the following tools:
+
+- [smacke/ffsubsync](https://github.com/smacke/ffsubsync): WebRTC's VAD + FFT to maximize signal cross correlation
+- [sc0ty/subsync](https://github.com/sc0ty/subsync): does speech-to-text and looks for matching word morphemes
+- [kaegi/alass](https://github.com/kaegi/alass): rust-based subtitle synchronizer with a fancy dynamic programming algorithm
+- [tympanix/subsync](https://github.com/tympanix/subsync): neural net based approach that optimizes directly for alignment when performing speech detection
+- [oseiskar/autosubsync](https://github.com/oseiskar/autosubsync): performs speech detection with bespoke spectrogram + logistic regression
+- [pums974/srtsync](https://github.com/pums974/srtsync): similar approach to ffsubsync (WebRTC's VAD + FFT to maximize signal cross correlation)
 
 ## Installation
 
